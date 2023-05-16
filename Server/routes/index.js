@@ -1,0 +1,26 @@
+const Router = require('express')
+const router = new Router()
+
+const userRouter = require('./userRouter')
+const clientRouter = require('./clientRouter')
+const categoryRouter = require('./categoryRouter')
+const brandRouter = require('./brandRouter')
+const productRouter = require('./productRouter')
+const cartRouter = require('./cartRouter')
+const cartProductRouter = require('./cartProductRouter')
+const orderRouter = require('./orderRouter')
+const orderProductRouter = require('./orderProductRouter')
+const colorRouter = require('./colorRouter')
+
+router.use('/user', userRouter)
+router.use('/client', clientRouter)
+router.use('/category', categoryRouter)
+router.use('/brand', brandRouter)
+router.use('/product', productRouter)
+router.use('/cart', cartRouter)
+router.use('/cart_product', cartProductRouter)
+router.use('/order', orderRouter)
+router.use('/order_product', orderProductRouter)
+router.use('/color', colorRouter)
+
+module.exports = router;

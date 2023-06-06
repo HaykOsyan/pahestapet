@@ -6,7 +6,7 @@ class CategoryController {
     async create (req, res) {
         try {
             const { name } = req.body;
-            const existingCategory = await Category.findOne({ name });
+            const existingCategory = await Category.findOne({where :{ name }});
             if (existingCategory) {
                 return res.status(400).json({ message: 'Category already exists' });
             }
@@ -22,7 +22,6 @@ class CategoryController {
     async getAll (req,res) {
         const categories = await Category.findAll()
         return res.json({categories})
-
     }
 
     async getOne (req,res) {

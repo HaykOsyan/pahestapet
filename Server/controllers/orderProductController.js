@@ -18,7 +18,7 @@ class OrderProductController {
             model: Product,
             attributes: ['name']
           }],
-          attributes: ["id", "orderId", "quantity", "createdAt", "updatedAt"],
+          // attributes: ["id", "orderId", "quantity", "createdAt", "updatedAt"],
         })
       }
 
@@ -26,6 +26,7 @@ class OrderProductController {
         id: order.id,
         orderId: order.orderId,
         productName: order.dataValues.product.name,
+        price:order.price,
         quantity: order.quantity,
         createdAt: order.createdAt,
         updatedAt: order.updatedAt,

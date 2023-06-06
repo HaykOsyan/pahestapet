@@ -10,7 +10,7 @@ const Samvel = () => {
 
     return (
         <>
-            {/* <MyPagination count={154}/> */}
+            <MyPagination count={154} limit={5}/>
             {/* <AddProduct/> */}
             {/* <AddCategory/>
             <AddBrand/>

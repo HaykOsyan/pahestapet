@@ -1,0 +1,6 @@
+.form-category-brand{
+    display: inline-block;
+}
+.form-category-brand div{
+    display: flex;
+}

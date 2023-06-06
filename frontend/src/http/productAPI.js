@@ -1,7 +1,7 @@
 import { $host, $authHost } from ".";
 
-export const createCartProduct = async (cartId, productIds, quantities) => {
-    const {data} = await $host.post('api/cart_product', {'cartId':cartId,'productIds':productIds, 'quantities':quantities})
+export const createCartProduct = async (cartId, productIds, quantities, prices) => {
+    const {data} = await $host.post('api/cart_product', {'cartId':cartId,'productIds':productIds, 'quantities':quantities, 'prices':prices})
     return data
 }
 
@@ -30,6 +30,11 @@ export const fetchBrands = async () => {
     return data
 }
 
+export const fetchOneBrand = async (id) => {
+    const {data} = await $host.get('api/brand/' + id)
+    return data
+}
+
 export const createColor = async (color) => {
     const {data} = await $authHost.post('api/color',{'name': color})
     return data
@@ -50,10 +55,24 @@ export const fetchColors = async () => {
 //     return data
 // }
 
-export const fetchProducts = async (page) => {
-    const {data} = await $host.get('api/product',{params:{page}})
-    return data
-}
+export const fetchProducts = async (categoryId, brandId, limit, page) => {
+    const params = { page };
+  
+    if (categoryId) {
+      params.categoryId = categoryId;
+    }
+  
+    if (brandId) {
+      params.brandId = brandId;
+    }
+  
+    if (limit) {
+      params.limit = limit;
+    }
+  
+    const response = await $host.get('api/product', { params });
+    return response.data;
+  };
 
 export const fetchOneProduct = async (id) => {
     const data = await $host.get('api/product/' + id)
@@ -70,8 +89,8 @@ export const fetchOneCart = async (id) => {
     return data
 }
 
-export const createOrder = async (cartId, productIds, quantities) => {
-    const {data} = await $authHost.post('api/order',{'cartId':cartId,'productIds':productIds, 'quantities':quantities})
+export const createOrder = async (cartId, productIds, quantities, prices) => {
+    const {data} = await $authHost.post('api/order',{'cartId':cartId,'productIds':productIds, 'quantities':quantities, 'prices':prices})
     return data
 }
 

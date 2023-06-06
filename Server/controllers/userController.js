@@ -1,5 +1,5 @@
 const ApiError = require('../error/ApiError')
-const bcript = require('bcrypt')
+const bcrypt = require('bcrypt')
 const { User } = require('../models/models')
 const jwt = require('jsonwebtoken')
 const { body, validationResult } = require('express-validator');
@@ -23,7 +23,7 @@ class UserController {
         }
 
         const { email, password, role } = req.body;
-        const existingUser = await User.findOne({ email });
+        const existingUser = await User.findOne({ where: {email} });
         if (existingUser) {
             return res.status(400).json({ errors: [{ msg: 'Email already exists' }] });
         }
@@ -39,7 +39,7 @@ class UserController {
         if (!user) {
             next(ApiError.internal('no user with such email hey You'))
         }
-        let comparePassword = bcript.compareSync(password, user.password)
+        let comparePassword = bcrypt.compareSync(password, user.password)
         if (!comparePassword) {
             next(ApiError.internal('wrong e pass'))
         }

@@ -58,48 +58,68 @@ const AddProduct = observer(() => {
   const [productImage, setProductImage] = useState();
 
   const saveProduct = async () => {
+    if (
+      productName === '' ||
+      productVolume === '' ||
+      productWeight === '' ||
+      productCountry === '' ||
+      productPrice === '' ||
+      productRate === '' ||
+      productQuantity === '' ||
+      productCode === '' ||
+      productCategoryId === '' ||
+      productBrandId === '' ||
+      // productTitle === '' ||
+      // productDescription === '' ||
+      productColorIds.length === 0 ||
+      productImage === null
+    ) {
+      alert('Please fill in all the required fields.');
+      return;
+    }
+  
     let data;
     try {
-        const formData = new FormData();
-        formData.append('name', productName);
-        formData.append('volume', productVolume);
-        formData.append('weight', productWeight);
-        formData.append('country', productCountry);
-        formData.append('price', productPrice);
-        formData.append('rate', productRate);
-        formData.append('quantity', productQuantity);
-        formData.append('code', productCode);
-        formData.append('categoryId', productCategoryId);
-        formData.append('brandId', productBrandId);
-        formData.append('title', productTitle);
-        formData.append('description', productDescription);
-        formData.append('colorIds', productColorIds);
-        formData.append('img', productImage, productImage.name);
-
-        data = await createProduct(formData);
-        console.log(data);
-
-        // clear input fields and show success alert
-        setProductName('');
-        setProductVolume('');
-        setProductWeight('');
-        setProductCountry('');
-        setProductPrice('');
-        setProductRate('');
-        setProductQuantity('');
-        setProductCode('');
-        setProductCategoryId('');
-        setProductBrandId('');
-        setProductTitle('');
-        setProductDescription('');
-        setProductColorIds([]);
-        setProductImage(null);
-        alert('Product added to database!');
+      const formData = new FormData();
+      formData.append('name', productName);
+      formData.append('volume', productVolume);
+      formData.append('weight', productWeight);
+      formData.append('country', productCountry);
+      formData.append('price', productPrice);
+      formData.append('rate', productRate);
+      formData.append('quantity', productQuantity);
+      formData.append('code', productCode);
+      formData.append('categoryId', productCategoryId);
+      formData.append('brandId', productBrandId);
+      formData.append('title', productTitle);
+      formData.append('description', productDescription);
+      formData.append('colorIds', productColorIds);
+      formData.append('img', productImage, productImage.name);
+  
+      data = await createProduct(formData);
+      console.log(data);
+  
+      // Clear input fields and show success alert
+      setProductName('');
+      setProductVolume('');
+      setProductWeight('');
+      setProductCountry('');
+      setProductPrice('');
+      setProductRate('');
+      setProductQuantity('');
+      setProductCode('');
+      setProductCategoryId('');
+      setProductBrandId('');
+      setProductTitle('');
+      setProductDescription('');
+      setProductColorIds([]);
+      setProductImage(null);
+      alert('Product added to the database!');
+    } catch (err) {
+      console.log(err);
     }
-    catch(err){
-        console.log(err);
-    }
-}
+  };
+  
 
 
   return (

@@ -1,4 +1,4 @@
-const { Product, Category, Brand, Color, ProductInfo } = require('../models/models')
+const { Product, Category, Brand, Color, ProductInfo, ProductColor } = require('../models/models')
 const ApiError = require('../error/ApiError')
 const sequelize = require('sequelize')
 const { Op } = require('sequelize')
@@ -28,7 +28,7 @@ class ProductController {
         categoryId,
         brandId
       });
-      
+
       const productInfo = await ProductInfo.create({
         title,
         description,
@@ -36,7 +36,7 @@ class ProductController {
 
       await product.setInfo(productInfo);
 
-        let productColorIds = colorIds.split(",").map(Number);
+      let productColorIds = colorIds.split(",").map(Number);
       //Harkavor e MAP anel HAYK
 
       if (productColorIds && productColorIds.length > 0) {
@@ -62,99 +62,41 @@ class ProductController {
     }
   }
 
-  // async getAll (req,res) {
-  //     let {categoryId,brandId, limit, page} = req.query
-  //     page = page || 1
-  //     limit = limit || 9
-  //     let offset = limit * page - limit
-  //     let products;
-  //     if(!categoryId && !brandId){
-  //         products = await Product.findAndCountAll({
-  //             include:[{
-  //                 model:Category,
-  //                 attributes:['name'],
-  //             },                
-  //             {
-  //                 model:Brand,
-  //                 attributes:['name']
-  //             }],limit,offset,
-
-  //         })
-  //     }
-  //     if(categoryId && !brandId){
-  //         products = await Product.findAndCountAll({where:{categoryId}, limit,offset})
-  //     }
-  //     if(!categoryId && brandId){
-  //         products = await Product.findAndCountAll({where:{brandId}, limit,offset})
-  //     }
-  //     if(categoryId && brandId){
-  //         products = await Product.findAndCountAll({where:{brandId,categoryId}, limit,offset})
-  //     }
-
-  //     return res.json(products)
-  // }
-
-  // async getOne (req,res) {
-  //     const {id} = req.params
-  //     const product = await Product.findOne({where:{id}})
-  //     return res.json(product)
-  // }
-
   async getAll(req, res) {
     let { categoryId, brandId, limit, page } = req.query;
     page = page || 1;
-    limit = limit || 10;
+    limit = limit || 1000;
     let offset = limit * page - limit;
     let products;
-    if (!categoryId && !brandId) {
-      products = await Product.findAndCountAll({
-        include: [
-          {
-            model: Category,
-            attributes: ['name'],
-          },
-          {
-            model: Brand,
-            attributes: ['name'],
-          },
-          {
-            model: ProductInfo,
-            as: 'info',
-          },
-          { 
-            model: Color,
-            attributes:['name'],
-            through: { attributes: [] }, // exclude join table attributes
-          }
-        ],
-        limit,
-        offset,
-      });
-    }
-    if (categoryId && !brandId) {
-      products = await Product.findAndCountAll({
-        where: { categoryId },
-        include: [{ model: ProductInfo, as: 'info' }],
-        limit,
-        offset,
-      });
-    }
-    if (!categoryId && brandId) {
-      products = await Product.findAndCountAll({
-        where: { brandId },
-        include: [{ model: ProductInfo, as: 'info' }],
-        limit,
-        offset,
-      });
-    }
-    if (categoryId && brandId) {
-      products = await Product.findAndCountAll({
-        where: { brandId, categoryId },
-        include: [{ model: ProductInfo, as: 'info' }],
-        limit,
-        offset,
-      });
-    }
+    const includeArray = [
+      {
+        model: Category,
+        attributes: ['name'],
+        where: categoryId ? { id: categoryId } : {},
+      },
+      {
+        model: Brand,
+        attributes: ['name'],
+        where: brandId ? { id: brandId } : {},
+      },
+      {
+        model: ProductInfo,
+        as: 'info',
+      },
+      {
+        model: Color,
+        attributes: ['name'],
+        through: { attributes: [] },
+      },
+    ];
+
+    products = await Product.findAndCountAll({
+      include: includeArray,
+      limit,
+      offset,
+    });
+
+
 
     return res.json(products);
   }

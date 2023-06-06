@@ -18,3 +18,19 @@ I hope this helps you get started with creating a VK.com page for selling cars f
 
 1) productController HAYK
 
+2) onChange pgewith category or brandselector
+
+3) qanaknery գումարելիս փոխել թիվ դարձնել, 10+17 1017 ուղղել 27
+3,1) տդս ի մեեջ էլ քանակը մնացորդի փոփոխել 777 հատ, երբ ավելանում է օրդեր, հանել
+
+4)հետագայի համար cartProduct աելացնելիս, միջինացնել ըստ գնի,ենթադրենք թանկ էժն ․․․
+
+5)cart էջում գինն ուղղել
+
+6) Cart_product router
+
+7) brand galis a vorpes brand.brand?? 
+
+8) cartpage chtoxni avelacni orderikum maxic shat apranq
+
+9) http://localhost:3000/order/3        order sum AND productprice

@@ -62,13 +62,13 @@ class CartController {
         productVolume: cp.product.volume,
         productWeight: cp.product.weight,
         productCountry: cp.product.country,
-        productPrice: cp.product.price,
+        productPrice: cp.price,
         productRate: cp.product.rate,
         // productImg: "2fbd2590-4ab3-49bd-b92d-d37657662295.png",  հետո նկարի հարցը UPGRADE
         productCode: cp.product.code,
         category:cp.product.category.name,
         brand:cp.product.brand.name,
-        sum:cp.quantity*cp.product.price
+        sum:cp.quantity*cp.price
       }
     })
 

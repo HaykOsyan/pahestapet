@@ -4,12 +4,13 @@ const ApiError = require('../error/ApiError')
 class OrderController {
 
     async create (req,res) {
-        const {cartId, productIds, quantities} = req.body
+        const {cartId, productIds, quantities, prices} = req.body
         const order = await Order.create({cartId})
     
         for(let i=0; i<productIds.length; i++) {
             const productId = productIds[i]
             const quantity = quantities[i]
+            const price = prices[i]
     
             let cartProduct = await CartProduct.findOne({where:{productId:productId}})
     
@@ -17,7 +18,7 @@ class OrderController {
                 cartProduct = await CartProduct.update({quantity:cartProduct.quantity-quantity},
                                                 {where:{productId:productId}})
     
-                const orderProduct = await OrderProduct.create({orderId:order.id,productId,quantity})
+                const orderProduct = await OrderProduct.create({orderId:order.id,productId,quantity,price})
             }
             else{
                 return res.json('No more such product')
@@ -33,19 +34,21 @@ class OrderController {
             const orders = await Order.findAll({
                 include: {
                   model: OrderProduct,
-                  attributes: ["quantity"],
+                  attributes: ["quantity", "price"],
                   include:{
                     model:Product,
-                    attributes:["price"]
+                    attributes:["price","id"]
                   }
                 },
                 attributes: ["id", "createdAt", "updatedAt"],
               });
 
+        
           const orderResults = orders.map((order) => {
                 const orderProducts = order.dataValues.order_products;
+                console.log(orderProducts)
                 const orderSum = orderProducts.reduce((sum,orderProduct) => {
-                    return sum + orderProduct.dataValues.quantity * orderProduct.dataValues.product.dataValues.price
+                    return sum + orderProduct.dataValues.quantity * orderProduct.dataValues.price
                 },0)
                 return {
                   id: order.id,
@@ -70,18 +73,21 @@ class OrderController {
             where:{id},
             include:{
                 model:OrderProduct,
-                attributes:['quantity', 'createdAt', 'updatedAt'],
+                attributes:['quantity', 'price', 'createdAt', 'updatedAt'],
                 include:{
                     model:Product,
-                    attributes:['name','price']
+                    attributes:['name'],
+                    include:{
+                        model:CartProduct,
+                        // attributes:['']
+                    }
                 }
             }
         })
         if(order){
-            console.log(order.dataValues.order_products[0])
             const orderProducts = order.dataValues.order_products.map((orderProduct) => ({
                 productName: orderProduct.dataValues.product.name,
-                productPrice: orderProduct.dataValues.product.price,
+                productPrice: orderProduct.price,
                 quantity: orderProduct.dataValues.quantity,
                 createdAt: orderProduct.createdAt,
                 updatedAt: orderProduct.updatedAt,

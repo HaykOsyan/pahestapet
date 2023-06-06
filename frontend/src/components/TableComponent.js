@@ -1,24 +1,33 @@
 import React, { useState } from "react";
 import { Button, Table } from "react-bootstrap";
+import MyPagination from "./MyPagination";
 
-const TableComponent = ({ 
-   ths,
-   tds, 
-   funcEdit,        //edit function
-   funcShow, 
-   funcDelete, 
-   funcAddToOrder, 
-   showButtonEdit, 
-   showButtonShow, 
-   showButtonDelete, 
-   showButtonAdd
-  }) => {
+const TableComponent = ({
+  ths,
+  tds,
+  funcEdit,        //edit function
+  funcShow,
+  funcDelete,
+  funcAddToOrder,
+  showButtonEdit,
+  showButtonShow,
+  showButtonDelete,
+  showButtonAdd,
+  count,
+  limit,
+  onActivePageChange // Callback function to handle active page change
+}) => {
+  const [activePage, setActivePage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
 
   const filteredTds = tds.filter((td) =>
     Object.values(td).some((value) => String(value).includes(searchQuery))
   );
 
+  const handleActiveChange = (number) => {
+    setActivePage(number);
+    onActivePageChange(number); // Call the callback function with the updated value
+  };
   return (
     <>
       <input
@@ -99,12 +108,13 @@ const TableComponent = ({
               {showButtonAdd && (
                 <td>
                   {/* UPGRADE arhestakan productID !!!!!!!!!!!!! */}
-                  <Button 
-                  onClick={(e) => funcAddToOrder(e,td.id)} 
-                  id={td.id} 
-                  data-product_name={td.productName} 
-                  data-product_quantity={td.quantity} 
-                  variant="primary"
+                  <Button
+                    onClick={(e) => funcAddToOrder(e, td.id)}
+                    id={td.id}
+                    data-product_name={td.productName}
+                    data-product_quantity={td.quantity}
+                    data-product_price={td.productPrice}
+                    variant="primary"
                   >
                     Add
                   </Button>
@@ -114,6 +124,12 @@ const TableComponent = ({
           ))}
         </tbody>
       </Table>
+      <MyPagination 
+      onActiveChange={handleActiveChange} 
+      count={count} 
+      limit={limit} 
+      active={activePage} // Pass the activePage state to the MyPagination component
+      />
     </>
   );
 };

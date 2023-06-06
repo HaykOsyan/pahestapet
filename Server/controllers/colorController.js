@@ -5,7 +5,7 @@ class ColorController {
     async create (req, res) {
         try {
             const { name } = req.body;
-            const existingColor = await Color.findOne({ name });
+            const existingColor = await Color.findOne({where:{ name }});
             if (existingColor) {
                 return res.status(400).json({ message: 'Color already exists' });
             }

@@ -65,12 +65,14 @@ const Order = sequelize.define('order', {
 
 const OrderProduct = sequelize.define('order_product', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    quantity: {type: DataTypes.INTEGER, defaultValue:1}
+    quantity: {type: DataTypes.INTEGER, defaultValue:1},
+    price: {type: DataTypes.INTEGER, defaultValue:1},
 })
 
 const CartProduct = sequelize.define('cart_product', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     quantity: {type: DataTypes.INTEGER, defaultValue:1},
+    price: {type: DataTypes.INTEGER, defaultValue:1},
 })
 
 const CategoryBrand = sequelize.define('category_brand', {

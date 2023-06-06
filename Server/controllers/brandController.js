@@ -6,7 +6,7 @@ class BrandController {
     async create (req,res) {
         try {
             const { name } = req.body;
-            const existingBrand = await Brand.findOne({ name });
+            const existingBrand = await Brand.findOne({where:{ name }});
             if (existingBrand) {
                 throw new ApiError(`Brand with name '${name}' already exists`, 400);
             }
